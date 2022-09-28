@@ -32,9 +32,9 @@ while(True):
         my_event_trigger(ae, "AP_SPD_VAR_DEC")
 
     if 'Z' == input_str: # not work
-        my_event_trigger_with_arg1(ae, "SPEED_SLOT_INDEX_SET", 2)
+        my_event_trigger_with_arg1(ae, "AP_RPM_SLOT_INDEX_SET", 2)
     if 'z' == input_str: # not work
-        my_event_trigger_with_arg1(ae, "SPEED_SLOT_INDEX_SET", 1)
+        my_event_trigger_with_arg1(ae, "AP_RPM_SLOT_INDEX_SET", 1)
 
     # increase or decrease autopilot reference heading (direction)
     if 'w' == input_str:

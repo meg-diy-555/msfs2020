@@ -1,0 +1,13 @@
+E:\マイドライブ\msfs\github\MSFS_Con\bin\x86\Debug\MSFS_Con.exe.config
+E:\マイドライブ\msfs\github\MSFS_Con\bin\x86\Debug\MSFS_Con.exe
+E:\マイドライブ\msfs\github\MSFS_Con\bin\x86\Debug\MSFS_Con.pdb
+E:\マイドライブ\msfs\github\MSFS_Con\bin\x86\Debug\Microsoft.FlightSimulator.SimConnect.dll
+E:\マイドライブ\msfs\github\MSFS_Con\obj\x86\Debug\MSFS_Con.csproj.AssemblyReference.cache
+E:\マイドライブ\msfs\github\MSFS_Con\obj\x86\Debug\MSFS_Con.csproj.SuggestedBindingRedirects.cache
+E:\マイドライブ\msfs\github\MSFS_Con\obj\x86\Debug\MSFS_Con.Form1.resources
+E:\マイドライブ\msfs\github\MSFS_Con\obj\x86\Debug\MSFS_Con.Properties.Resources.resources
+E:\マイドライブ\msfs\github\MSFS_Con\obj\x86\Debug\MSFS_Con.csproj.GenerateResource.cache
+E:\マイドライブ\msfs\github\MSFS_Con\obj\x86\Debug\MSFS_Con.csproj.CoreCompileInputs.cache
+E:\マイドライブ\msfs\github\MSFS_Con\obj\x86\Debug\MSFS_Con.csproj.CopyComplete
+E:\マイドライブ\msfs\github\MSFS_Con\obj\x86\Debug\MSFS_Con.exe
+E:\マイドライブ\msfs\github\MSFS_Con\obj\x86\Debug\MSFS_Con.pdb
