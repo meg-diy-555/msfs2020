@@ -29,7 +29,7 @@ class MySerial:
         # print("ending thread")
         self.is_enable = False
 
-    def send(self, text: str):
+    def send_str(self, text: str):
         # self.queue.put(text)
         self.serial.write(text.encode('utf-8'))
         

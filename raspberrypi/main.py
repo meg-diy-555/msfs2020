@@ -7,48 +7,52 @@ from config import Config
 
 
 class RotaryEncoderaWithPushSwitchLED_1 (RotaryEncoderaWithPushSwitchLED):
-    def __init__(self, serial: MySerial):
+    def __init__(self, serial: MySerial, is_silent=True):
         super().__init__(
-            Config.pin_id_rot_a,
-            Config.pin_id_rot_b,
-            Config.pin_id_rot_sw,
-            Config.pin_id_led_1,
-            Config.pin_id_led_2
+            Config.pin_id_rot_1_a,
+            Config.pin_id_rot_1_b,
+            Config.pin_id_rot_1_sw,
+            Config.pin_id_led_1_a,
+            Config.pin_id_led_1_b
         )
         self.serial = serial
+        self.is_silent = is_silent
 
     def event_rot_sw_cw(self):
-        print("cw")
-        self.serial.send("cw")
+        if not self.is_silent: print("cw")
+        self.serial.send_str(Config.text_rot_1_cw)
         pass
 
     def event_rot_sw_ccw(self):
-        print("ccw")
-        self.serial.send("ccw")
+        if not self.is_silent: print("ccw")
+        self.serial.send_str(Config.text_rot_1_ccw)
         pass
 
     def event_rot_sw_pushed(self):
         # sample
-        print('rot sw pushed.')
         e_state = super().get_state()
         if RotaryEncoderaWithPushSwitchLED.State.OFF == e_state:
             super().set_state(RotaryEncoderaWithPushSwitchLED.State.ON_A)
-            self.serial.send("Autopilot Master ON Managed")
+            self.serial.send_str(Config.text_rot_1_state_a)
+            if not self.is_silent: print(Config.text_rot_1_state_a)
         elif RotaryEncoderaWithPushSwitchLED.State.ON_A == e_state:
             super().set_state(RotaryEncoderaWithPushSwitchLED.State.ON_B)
-            self.serial.send("Autopilot Master ON Directed")
+            self.serial.send_str(Config.text_rot_1_state_b)
+            if not self.is_silent: print(Config.text_rot_1_state_b)
         elif RotaryEncoderaWithPushSwitchLED.State.ON_B == e_state:
             super().set_state(RotaryEncoderaWithPushSwitchLED.State.ON_AB)
-            self.serial.send("Autopilot Master ON ???")
+            self.serial.send_str(Config.text_rot_1_state_ab)
+            if not self.is_silent: print(Config.text_rot_1_state_ab)
         elif RotaryEncoderaWithPushSwitchLED.State.ON_AB == e_state:
             super().set_state(RotaryEncoderaWithPushSwitchLED.State.OFF)
-            self.serial.send("Autopilot Master OFF")
+            self.serial.send_str(Config.text_rot_1_state_off)
+            if not self.is_silent: print(Config.text_rot_1_state_off)
         pass
 
 
 def main():
     serial = MySerial().start()
-    sw1 = RotaryEncoderaWithPushSwitchLED_1(serial)
+    sw1 = RotaryEncoderaWithPushSwitchLED_1(serial, is_silent=False)
 
     try:
         print("please input Ctrl-C and wait few seconds to terminalte this program.")
