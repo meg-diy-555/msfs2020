@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 
 namespace MSFS_Con
 {
-    class Controller
+    class SimConnecter
     {
-        static private Controller _controller = null;               //Instance
+        static private SimConnecter _controller = null;               //Instance
         public const int WM_USER_SIMCONNECT = 0x0402;
         private IntPtr m_hWnd = new IntPtr(0);                      //Form handle
         public SimConnect m_oSimConnect = null;
@@ -16,14 +16,14 @@ namespace MSFS_Con
 
         public event Action<Object, String> RecvSimobjectDataHandler;
 
-        ~Controller()
+        ~SimConnecter()
         {
             Disconnect();
         }
 
-        public static Controller getController()
+        public static SimConnecter getController()
         {
-            if (null == _controller) _controller = new Controller();
+            if (null == _controller) _controller = new SimConnecter();
             
             return _controller;
         }

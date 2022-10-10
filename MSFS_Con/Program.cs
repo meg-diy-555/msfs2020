@@ -18,7 +18,7 @@ namespace MSFS_Con
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Form1 form1 = new Form1();
-            Controller.getController().SetWindowHandle(form1.Handle);
+            SimConnecter.getController().SetWindowHandle(form1.Handle);
             Application.Run(form1);
         }
     }

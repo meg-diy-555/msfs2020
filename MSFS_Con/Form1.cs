@@ -24,10 +24,10 @@ namespace MSFS_Con
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Controller.getController().ToggleConnect();
-            if(Controller.getController().m_oSimConnect != null)
+            SimConnecter.getController().ToggleConnect();
+            if(SimConnecter.getController().m_oSimConnect != null)
             {
-                Controller.getController().RecvSimobjectDataHandler += this.ReceiveEventData;
+                SimConnecter.getController().RecvSimobjectDataHandler += this.ReceiveEventData;
             }
         }
 
@@ -43,8 +43,8 @@ namespace MSFS_Con
 
         private void button_com_connect_Click(object sender, EventArgs e)
         {
-            string msg = Controller.getController().ToggleConnectSerial();
-            Serial serial = Controller.getController().Serial;
+            string msg = SimConnecter.getController().ToggleConnectSerial();
+            Serial serial = SimConnecter.getController().Serial;
             if (null != serial && serial.IsOpen)
             {
                 this.button_com_connect.Text = "disconnect";
@@ -69,9 +69,9 @@ namespace MSFS_Con
             switch (m.Msg)
             {
                 // Message to this program
-                case Controller.WM_USER_SIMCONNECT:
+                case SimConnecter.WM_USER_SIMCONNECT:
                     //TDebug.WriteLine("Capture WndProc" + m.ToString());
-                    Controller.getController().m_oSimConnect?.ReceiveMessage();
+                    SimConnecter.getController().m_oSimConnect?.ReceiveMessage();
                     break;
             }
             base.WndProc(ref m);
@@ -113,7 +113,7 @@ namespace MSFS_Con
 
                 )
             {
-                Controller.getController().SetVariablesDouble(ar[0], Double.Parse(ar[1]));
+                SimConnecter.getController().SetVariablesDouble(ar[0], Double.Parse(ar[1]));
                 TDebug.WriteLine("受信:" + ar[0] + ":" + ar[1]);
             }
 
