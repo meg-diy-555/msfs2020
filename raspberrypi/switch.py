@@ -77,7 +77,7 @@ class PushSwitch(Switch):
             time.sleep(0.01)  # Chattering prevention
             is_pushed = GPIO.input(self.pin_id_rot_sw)
             if not is_pushed:
-                print("rot sw pushed. pin: " , str(self.pin_id_rot_sw))
+                # print("rot sw pushed. pin: " , str(self.pin_id_rot_sw))
                 self.event_rot_sw_pushed()
 
     def __delete__(self):
