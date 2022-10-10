@@ -20,10 +20,10 @@ class RotaryEncoder(Switch):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(pin_id_rot_a, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(pin_id_rot_a, GPIO.FALLING,
-                              callback=self._event_callback_rot_sw_falling, bouncetime=100)
+                              callback=self._event_callback_rot_sw_falling, bouncetime=5)
         GPIO.setup(pin_id_rot_b, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(pin_id_rot_b, GPIO.FALLING,
-                              callback=self._event_callback_rot_sw_falling, bouncetime=100)
+                              callback=self._event_callback_rot_sw_falling, bouncetime=5)
 
     def __delete__(self):
         # release evets and GPIO pins
@@ -33,7 +33,7 @@ class RotaryEncoder(Switch):
         GPIO.cleanup(pins)
 
     def _event_callback_rot_sw_falling(self, gpio_pin):
-        time.sleep(0.001)  # Chattering prevention
+        # time.sleep(0.001)  # Chattering prevention
         is_on_sw_a = GPIO.input(self.pin_id_rot_a)
         is_on_sw_b = GPIO.input(self.pin_id_rot_b)
         if (not is_on_sw_a and not is_on_sw_b):
@@ -70,10 +70,15 @@ class PushSwitch(Switch):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(pin_id_rot_sw, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(pin_id_rot_sw, GPIO.FALLING,
-                              callback=self._event_callback_rot_pushsw_falling, bouncetime=500)
+                              callback=self._event_callback_rot_pushsw_falling, bouncetime=10)
 
     def _event_callback_rot_pushsw_falling(self, gpio_pin):
-        self.event_rot_sw_pushed()
+        if self.pin_id_rot_sw  == gpio_pin:
+            time.sleep(0.01)  # Chattering prevention
+            is_pushed = GPIO.input(self.pin_id_rot_sw)
+            if not is_pushed:
+                print("rot sw pushed. pin: " , str(self.pin_id_rot_sw))
+                self.event_rot_sw_pushed()
 
     def __delete__(self):
         # release evets and GPIO pins
