@@ -226,6 +226,27 @@ namespace MSFS_Con
             m_oSimConnect.SetDataOnSimObject((DEFINITION)f.Definition, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, data);
         }
         #endregion
+
+        #region Serial Communication
+        // Serial Communicator
+        private Serial m_oSerial = null;
+        public Serial Serial { get { return m_oSerial; } }
+        public string ToggleConnectSerial()
+        {
+            string msg = "";
+            if (m_oSerial == null)
+            {
+                m_oSerial = new Serial();
+                msg = m_oSerial.Open();
+            }
+            else
+            {
+                msg = m_oSerial.Close();
+                m_oSerial = null;
+            }
+            return msg;
+        }
+        #endregion
     }
 
 }

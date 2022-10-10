@@ -5,12 +5,6 @@ using System.Diagnostics;
 
 namespace MSFS_Con
 {
-
-    public interface ISerialEventListener
-    {
-
-    }
-
     class Serial : SerialPort
     {
 
