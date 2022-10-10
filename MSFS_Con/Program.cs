@@ -33,6 +33,10 @@ namespace MSFS_Con
         // SimConnect
         private SimConnect m_oSimConnect = null;
 
+        // Serial Communicator
+        private Serial m_oSerial = null;
+        public Serial Serial { get { return m_oSerial; } }
+
         ~Controller()
         {
             Disconnect();
@@ -106,6 +110,23 @@ namespace MSFS_Con
             {
                 Disconnect();
             }
+        }
+
+        
+        public string ToggleConnectSerial()
+        {
+            string msg = "";
+            if (m_oSerial == null)
+            {
+                m_oSerial = new Serial();
+                msg = m_oSerial.Open();
+            }
+            else
+            {
+                msg = m_oSerial.Close();
+                m_oSerial = null;
+            }
+            return msg;
         }
 
     }
