@@ -56,4 +56,4 @@ class Config:
 
     com_name = '/dev/ttyGS0'
     com_baudrate = 115200
-    com_timeout = 1
+    com_timeout = 2

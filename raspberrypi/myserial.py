@@ -2,6 +2,7 @@ import serial
 from config import Config
 import threading
 import queue
+import time
 
 
 class MySerial:
@@ -40,19 +41,10 @@ class MySerial:
         # print("reading serial...")
 
         while self.is_enable:
-            # print("reading serial...")
-            # while ser.in_waiting:
-            input: str = ""
-            value: int
-            index: int
-
-            self.serial.read_until(expected=b'@')
-            input += self.serial.read_until(expected=b'/').decode()
-            index = self.serial.read_until(expected=b'=').decode()
-            data = self.serial.read_until(expected=b'$').decode()
-
-            print("input:" + input[:-1] + " index:" +
-                  index[:-1] + " data:" + data[:-1])
+            bytes = self.serial.read_all()
+            if len(bytes) > 0:
+                print('Serial:' , bytes.decode('utf-8'))
+            else:
+                time.sleep(0.100)
 
         self.serial.close()
-        # print("thread end")
