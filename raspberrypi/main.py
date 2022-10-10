@@ -11,7 +11,7 @@ class RotaryEncoderaWithPushSwitchLED_1 (RotaryEncoderaWithPushSwitchLED):
         super().__init__(
             Config.pin_id_rot_1_a,
             Config.pin_id_rot_1_b,
-            Config.pin_id_rot_1_sw,
+            Config.pin_id_rot_1_push_sw,
             Config.pin_id_led_1_a,
             Config.pin_id_led_1_b
         )
