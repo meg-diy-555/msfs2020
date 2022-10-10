@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="SimConnecter.cs" />
     <Compile Include="EventReq.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
