@@ -52,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="EventReq.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,6 +65,10 @@
     <Compile Include="Serial.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SimVarReq.cs" />
+    <Compile Include="SimVars.cs" />
+    <Compile Include="TDebug.cs" />
+    <Compile Include="UDP.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
