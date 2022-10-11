@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using Microsoft.FlightSimulator.SimConnect;
-using System.Runtime.InteropServices;
-using System.Linq;
-
 namespace MSFS_Con
 {
     internal static class Program
@@ -18,7 +14,6 @@ namespace MSFS_Con
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Form1 form1 = new Form1();
-            SimConnecter.getController().SetWindowHandle(form1.Handle);
             Application.Run(form1);
         }
     }

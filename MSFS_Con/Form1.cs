@@ -1,13 +1,5 @@
-﻿using Microsoft.FlightSimulator.SimConnect;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
+﻿using System;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MSFS_Con
@@ -20,32 +12,31 @@ namespace MSFS_Con
         public Form1()
         {
             InitializeComponent();
+            Controller.Instance.SimConnect_SetWindowHandle(this.Handle);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SimConnecter.getController().ToggleConnect();
-            if(SimConnecter.getController().m_oSimConnect != null)
-            {
-                SimConnecter.getController().RecvSimobjectDataHandler += this.ReceiveEventData;
-            }
+            Controller.Instance.SimConnect_ToggleConnect();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.textBox_comname.Text = Config.com_name;
+            this.textBox_comname.Text = Controller.Instance.Serial_ComPortName;
+
+            this._udp = new UDP();
+            this._udp.ReceiveEventDataHandler += this.ReceiveUdpData;
         }
 
         private void textBox_comname_TextChanged(object sender, EventArgs e)
         {
-            Config.com_name = this.textBox_comname.Text;
+            Controller.Instance.Serial_ComPortName = this.textBox_comname.Text;
         }
 
         private void button_com_connect_Click(object sender, EventArgs e)
         {
-            string msg = SimConnecter.getController().ToggleConnectSerial();
-            Serial serial = SimConnecter.getController().Serial;
-            if (null != serial && serial.IsOpen)
+            String msg = Controller.Instance.Serial_ToggleConnect();
+            if(Controller.Instance.Serial_IsConnect == true)
             {
                 this.button_com_connect.Text = "disconnect";
             }
@@ -55,8 +46,6 @@ namespace MSFS_Con
             }
             this.toolStripStatusLabel1.Text = msg;
 
-            this._udp = new UDP();
-            this._udp.ReceiveEventDataHandler += receive;
         }
 
 
@@ -69,9 +58,8 @@ namespace MSFS_Con
             switch (m.Msg)
             {
                 // Message to this program
-                case SimConnecter.WM_USER_SIMCONNECT:
-                    //TDebug.WriteLine("Capture WndProc" + m.ToString());
-                    SimConnecter.getController().m_oSimConnect?.ReceiveMessage();
+                case Controller.WM_USER_SIMCONNECT:
+                    Controller.Instance.SimConnect_ReceiveMessage();
                     break;
             }
             base.WndProc(ref m);
@@ -84,14 +72,10 @@ namespace MSFS_Con
             TDebug.WriteLine("Server Start");
         }
 
-        private void receive(object sender, byte[] data)
+        private void ReceiveUdpData(object sender, byte[] data)
         {
-            /*
-            Invoke((Action)(() =>
-            {
-                TDebug.WriteLine("受信データ:" +  Encoding.UTF8.GetString(data));
-            }));
-            */
+            //要リファクタリング
+
             //_udp.SendData("お返事");
             String message = Encoding.UTF8.GetString(data);
 
@@ -113,16 +97,8 @@ namespace MSFS_Con
 
                 )
             {
-                SimConnecter.getController().SetVariablesDouble(ar[0], Double.Parse(ar[1]));
+                SimConnectProvider.Instance.SendData(ar[0], Double.Parse(ar[1]));
                 TDebug.WriteLine("受信:" + ar[0] + ":" + ar[1]);
-            }
-
-        }
-        private void ReceiveEventData(object sender, String message)
-        {
-            if(_udp.isServer)
-            {
-                _udp.SendData(message);
             }
         }
 
@@ -135,6 +111,11 @@ namespace MSFS_Con
         private void timer1_Tick(object sender, EventArgs e)
         {
             RTB_DebugWindow.Text = "";
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Controller.Instance.push();
         }
     }
 }
