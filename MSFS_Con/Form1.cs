@@ -25,7 +25,7 @@ namespace MSFS_Con
             this.textBox_comname.Text = Controller.Instance.Serial_ComPortName;
 
             this._udp = new UDP();
-            this._udp.ReceiveEventDataHandler += this.ReceiveUdpData;
+            this._udp.ReceiveEventDataEvent += this.ReceiveUdpData;
         }
 
         private void textBox_comname_TextChanged(object sender, EventArgs e)

@@ -28,16 +28,12 @@ namespace MSFS_Con
         /// </summary>
         private UdpClient udpClient;
         private IPEndPoint remoteEP;
-        private Boolean isSetRemoteEP = false;
-        private Boolean isStarted = false;
-        public Boolean isServer = false;
+        private Boolean isSetRemoteEP { get; set; } = false;
+        private Boolean isStarted { get; set; } = false;
+        public Boolean isServer { get; set; } = false;
 
-        //Form側でUIを操作しようとするとスレッドが違うのでエラーになるからForm側でInvokeすること
-        public event Action<Object, Byte[]> ReceiveEventDataHandler;
-
-        public UDP()
-        {
-        }
+        public UDP() { }
+        ~UDP() { }
 
         public void StartServerMode(Int32 port)
         {
@@ -77,6 +73,8 @@ namespace MSFS_Con
             await this.udpClient.SendAsync(data, data.Length, this.remoteEP);
         }
 
+        //Form側でUIを操作しようとするとスレッドが違うのでエラーになるからForm側でInvokeすること
+        public event Action<Object, Byte[]> ReceiveEventDataEvent;
         /// <summary>
         /// Use Action<Object, Byte[]> ReceiveEventHander</Object>
         /// </summary>
@@ -95,7 +93,7 @@ namespace MSFS_Con
                     this.isSetRemoteEP = true;
                 }
 
-                this.ReceiveEventDataHandler?.Invoke(this, data);
+                this.ReceiveEventDataEvent?.Invoke(this, data);
             }
             ///
             /// このエラー処理どうするか要検討
