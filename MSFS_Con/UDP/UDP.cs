@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading;
+using System.Diagnostics;
 
 namespace MSFS_Con
 {
@@ -103,6 +102,7 @@ namespace MSFS_Con
             ///
             catch(Exception e)
             {
+                Debug.WriteLine(e.Message);
                 this.udpClient.Dispose();
                 this.udpClient = null;
                 IPEndPoint myendpoint = new IPEndPoint(IPAddress.Any, 0);
