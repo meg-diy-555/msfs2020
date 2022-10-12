@@ -19,6 +19,14 @@
             "program": "myserial.py",
             "console": "integratedTerminal",
             "justMyCode": true
+        },
+        {
+            "name": "Python: test_send_serial",
+            "type": "python",
+            "request": "launch",
+            "program": "test_send_serial.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
         }
     ]
 }
