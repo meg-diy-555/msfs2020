@@ -95,7 +95,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>copy /Y $(SolutionDir)SimConnect.dll  $(SolutionDir)bin\x64\Debug\
+    <PreBuildEvent>
 </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>$(ProjectDir)copy_simconnnect_dll.bat
+copy /Y  $(ProjectDir)SimConnect.dll  $(TargetDir)</PostBuildEvent>
   </PropertyGroup>
 </Project>
