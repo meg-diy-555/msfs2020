@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
 using static MSFS_Con.UDPProvider;
@@ -133,19 +135,52 @@ namespace MSFS_Con
         private void button4_Click_1(object sender, EventArgs e)
         {
             //this._udpProvider?.SendData("テスト");
+            /*
             LUDPHeaderStruct sendheader = new LUDPHeaderStruct();
             int size = Marshal.SizeOf(sendheader);
             sendheader.Flags = 0x0A;
             sendheader.AckNo = 45000;
-            sendheader.Tests = 0x03;
+            sendheader.Window = 0x03;
             IntPtr pss = Marshal.AllocHGlobal(size);
             Marshal.StructureToPtr(sendheader, pss, false);
             byte[] sendbyte = new byte[size];
             Marshal.Copy(pss, sendbyte, 0, size);
             Marshal.FreeHGlobal(pss);
 
-
             this._udpProvider?.SendData(sendbyte);
+            */
+
+            LUDPPacket hd = new LUDPPacket();
+            LUDPDatagram[] dt = new LUDPDatagram[1];
+            dt[0] = new LUDPDatagram();
+            dt[0].SessionID = 1;
+            dt[0].DataSize = 10;
+            dt[0].Data = new byte[10];
+            dt[0].Data[5] = 0xFF;
+            dt[0].AckNo = 20;
+            dt[0].ChannelID = 3;
+            dt[0].SequenceNo = 15;
+
+            hd.Data = dt;
+            hd.Flags = 0x0A;
+            hd.AckNo = 20000;
+            hd.DataCount = 1;
+
+            byte[] hdbuf = this._udpProvider?.LUDPPacketToByte(hd);
+
+            this._udpProvider?.SendData(hdbuf);
+
+
+
+        }
+        private byte[] ObjectToByteArray(Object obj)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            using (var ms = new MemoryStream())
+            {
+                bf.Serialize(ms, obj);
+                return ms.ToArray();
+            }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
