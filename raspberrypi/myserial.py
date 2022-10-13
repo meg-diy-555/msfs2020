@@ -7,7 +7,8 @@ import time
 
 class MySerial:
 
-    def __init__(self):
+    def __init__(self, serial_received):
+        self.serial_received = serial_received
         self.serial = serial.Serial(
             Config.com_name, Config.com_baudrate, timeout=Config.com_timeout)
         self.is_enable = False
@@ -41,9 +42,10 @@ class MySerial:
         # print("reading serial...")
 
         while self.is_enable:
-            bytes = self.serial.read_all()
+            bytes = self.serial.readline()
             if len(bytes) > 0:
-                print('Serial:' , bytes.decode('utf-8'))
+                msg = bytes.decode('utf-8')
+                self.serial_received(msg)
             else:
                 time.sleep(0.100)
 
