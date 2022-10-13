@@ -80,5 +80,7 @@ namespace MSFS_Con
             }
             return "Connection to " + SerialConfig.com_name + " has been disconnected.";
         }
+
+
     }
 }

@@ -9,40 +9,11 @@ namespace MSFS_Con
 {
     class SimConnectProvider
     {
-        public class VARIABLES
-        {
-            public static Val TITLE { get; } = new Val() { Name = "TITLE", Units = null };
-            public static Val GEAR_HANDLE_POSITION { get; } = new Val() { Name = "GEAR HANDLE POSITION", Units = "Bool", SIMCONNECT_PERIOD = SIMCONNECT_PERIOD.SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG = SIMCONNECT_DATA_REQUEST_FLAG.CHANGED };
-            public static Val PLANE_ALTITUDE { get; } = new Val() { Name = "PLANE ALTITUDE", Units = "Feet" };
-            public static Val PLANE_HEADING_DEGREES_TRUE { get; } = new Val() { Name = "PLANE HEADING DEGREES TRUE", Units = "Degrees" };
-            public static Val PLANE_LATITUDE { get; } = new Val() { Name = "PLANE LATITUDE", Units = "Radians" };
-            public static Val PLANE_LONGITUDE { get; } = new Val() { Name = "PLANE LONGITUDE", Units = "Radians" };
-            public static Val PLANE_BANK_DEGREES { get; } = new Val() { Name = "PLANE BANK DEGREES", Units = "Radians" };
-            public static Val PLANE_PITCH_DEGREES { get; } = new Val() { Name = "PLANE PITCH DEGREES", Units = "Radians" };
-            public static Val AILERON_POSITION { get; } = new Val() { Name = "AILERON POSITION", Units = "Position" };
-            public static Val FLAP_POSITION_SET { get; } = new Val() { Name = "FLAP POSITION SET", Units = "Position" };
-            public static Val RUDDER_POSITION { get; } = new Val() { Name = "RUDDER POSITION", Units = "Position" };
-            public static Val GENERAL_ENG_THROTTLE_LEVER_POSITION_1 { get; } = new Val() { Name = "GENERAL ENG THROTTLE LEVER POSITION:1", Units = "Percent" };
-            public static Val GENERAL_ENG_THROTTLE_LEVER_POSITION_2 { get; } = new Val() { Name = "GENERAL ENG THROTTLE LEVER POSITION:2", Units = "Percent" };
 
-        }
 
         public const int WM_USER_SIMCONNECT = 0x0402;
 
-        public enum EVENTS
-        {
-            // If you want, add the values,
-            ALTITUDE_SLOT_INDEX_SET,
-            HEADING_SLOT_INDEX_SET,
-            SPEED_SLOT_INDEX_SET,
-            VS_SLOT_INDEX_SET,
-            FLAPS_INCR,
-            FLAPS_DECR,
-            AP_MASTER,
-            AP_SPD_VAR_SET,
-            AP_ALT_VAR_SET_ENGLISH,
-            HEADING_BUG_SET,
-        };
+
 
         private static readonly Lazy<SimConnectProvider> _instance = new Lazy<SimConnectProvider>(() => new SimConnectProvider());
         public static SimConnectProvider Instance => _instance.Value;
@@ -160,7 +131,7 @@ namespace MSFS_Con
             this.OnRecvSimobjectDataByTypeEvent?.Invoke(this, mes);
         }
 
-        public event Action<Object, SimConnectProvider.EVENTS> OnRecvEventEvent;
+        public event Action<Object, EVENTS> OnRecvEventEvent;
         /// <summary>
         /// When received events.
         /// </summary>
@@ -168,7 +139,7 @@ namespace MSFS_Con
         /// <param name="recEvent"></param>
         private void SimConnect_OnRecvEvent(SimConnect sender, SIMCONNECT_RECV_EVENT recEvent)
         {
-            this.OnRecvEventEvent?.Invoke(this, (SimConnectProvider.EVENTS)recEvent.uEventID);
+            this.OnRecvEventEvent?.Invoke(this, (EVENTS)recEvent.uEventID);
             
             switch (recEvent.uEventID)
             {
@@ -298,13 +269,7 @@ namespace MSFS_Con
 
         #region Inner class and structure
 
-        public class Val
-        {
-            public String Name { get; set; }
-            public String Units { get; set; }
-            public SIMCONNECT_PERIOD SIMCONNECT_PERIOD { get; set; } = SIMCONNECT_PERIOD.SECOND;
-            public SIMCONNECT_DATA_REQUEST_FLAG SIMCONNECT_DATA_REQUEST_FLAG { get; set; } = SIMCONNECT_DATA_REQUEST_FLAG.DEFAULT;
-        }
+
         class SimVarStructure
         {
             public UInt32 Definition { get; set; }
