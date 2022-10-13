@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace MSFS_Con
 {
@@ -26,55 +27,35 @@ namespace MSFS_Con
         /// データ受信は
         /// UDP.ReceiveEventHanderのイベントハンドラを登録すればデータ受信時に呼ばれる。
         /// </summary>
-        private UdpClient udpClient;
-        private IPEndPoint remoteEP;
-        private Boolean isSetRemoteEP { get; set; } = false;
-        private Boolean isStarted { get; set; } = false;
-        public Boolean isServer { get; set; } = false;
+        private UdpClient _udpClient { get; set; }
+        //private IPEndPoint _remoteEP { get; set; }
+        private IPEndPoint _localEP { get; set; }
 
         public UDP() { }
         ~UDP() { }
 
-        public void StartServerMode(Int32 port)
+        public void CreateSocket(Int32 port)
         {
-            if (this.isStarted) return;
-            IPEndPoint myendpoint = new IPEndPoint(IPAddress.Any, port);
-            this.udpClient = new UdpClient(myendpoint);
+            if (this._udpClient != null) return;
+           
+            this._localEP = new IPEndPoint(IPAddress.Any, port);
 
-            this.udpClient.BeginReceive(new AsyncCallback(ReceiveCallback), this.udpClient);
-
-            this.isStarted = true;
-
-            this.isServer = true;
-        }
-        public void StartClientMode(String serverIP, Int32 port)
-        {
-            if (this.isStarted) return;
-            IPEndPoint myendpoint = new IPEndPoint(IPAddress.Any, 0);
-            this.udpClient = new UdpClient(myendpoint);
-
-            this.remoteEP = new IPEndPoint(IPAddress.Parse(serverIP), port);
-            this.isSetRemoteEP = true;
-
-            this.udpClient.BeginReceive(new AsyncCallback(ReceiveCallback), this.udpClient);
-
-            this.isStarted = true;
+            this._udpClient = new UdpClient(this._localEP);
+            this._udpClient.BeginReceive(new AsyncCallback(ReceiveCallback), this._udpClient);
         }
 
-        public async void SendData(String message)
+        public async void SendData(String message, IPEndPoint remoteEP)
         {
-            if (!this.isSetRemoteEP) return;
             byte[] sendByte = Encoding.UTF8.GetBytes(message);
-            await this.udpClient.SendAsync(sendByte, sendByte.Length, this.remoteEP);
+            await this._udpClient?.SendAsync(sendByte, sendByte.Length, remoteEP);
         }
-        public async void SendData(Byte[] data)
+        public async void SendData(Byte[] data, IPEndPoint remoteEP)
         {
-            if (!this.isSetRemoteEP) return;
-            await this.udpClient.SendAsync(data, data.Length, this.remoteEP);
+            await this._udpClient?.SendAsync(data, data.Length, remoteEP);
         }
 
         //Form側でUIを操作しようとするとスレッドが違うのでエラーになるからForm側でInvokeすること
-        public event Action<Object, Byte[]> ReceiveEventDataEvent;
+        public event Action<Object, Byte[], IPEndPoint> ReceiveUdpDataEvent;
         /// <summary>
         /// Use Action<Object, Byte[]> ReceiveEventHander</Object>
         /// </summary>
@@ -84,16 +65,13 @@ namespace MSFS_Con
             UdpClient u = (UdpClient)(ar.AsyncState);
             try
             {
-                IPEndPoint e = new IPEndPoint(IPAddress.Any, 0);
+                IPEndPoint e = null;
                 byte[] data = u.EndReceive(ar, ref e);
 
-                if (!this.isSetRemoteEP)
-                {
-                    this.remoteEP = e;
-                    this.isSetRemoteEP = true;
-                }
+                //If it is not know peer, add remoteEP.
+                //if (this._remoteEP is null) this._remoteEP = e;
 
-                this.ReceiveEventDataEvent?.Invoke(this, data);
+                this.ReceiveUdpDataEvent?.Invoke(this, data, e);
             }
             ///
             /// このエラー処理どうするか要検討
@@ -101,12 +79,11 @@ namespace MSFS_Con
             catch(Exception e)
             {
                 Debug.WriteLine(e.Message);
-                this.udpClient.Dispose();
-                this.udpClient = null;
-                IPEndPoint myendpoint = new IPEndPoint(IPAddress.Any, 0);
-                this.udpClient = new UdpClient(myendpoint);
+                this._udpClient?.Dispose();
+                this._udpClient = null;
+                return;
             }
-            this.udpClient.BeginReceive(new AsyncCallback(ReceiveCallback), u);
+            this._udpClient.BeginReceive(new AsyncCallback(ReceiveCallback), u);
         }
     }
 }

@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Drawing;
+using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using static MSFS_Con.UDPProvider;
 
 namespace MSFS_Con
 {
@@ -8,6 +12,7 @@ namespace MSFS_Con
     public partial class Form1 : Form
     {
         UDP _udp = null;
+        private UDPProvider _udpProvider { get; set; }
 
         public Form1()
         {
@@ -25,7 +30,7 @@ namespace MSFS_Con
             this.textBox_comname.Text = Controller.Instance.Serial_ComPortName;
 
             this._udp = new UDP();
-            this._udp.ReceiveEventDataEvent += this.ReceiveUdpData;
+            this._udp.ReceiveUdpDataEvent += this.ReceiveUdpData;
         }
 
         private void textBox_comname_TextChanged(object sender, EventArgs e)
@@ -68,11 +73,13 @@ namespace MSFS_Con
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            _udp.StartServerMode(9000);
-            TDebug.WriteLine("Server Start");
+            //_udp.StartServerMode(9000);
+            //_udp.CreateSocket(9000);
+            //TDebug.WriteLine("Server Start");
+            if (this._udpProvider is null) this._udpProvider = new UDPProvider(9000);
         }
 
-        private void ReceiveUdpData(object sender, byte[] data)
+        private void ReceiveUdpData(object sender, byte[] data, IPEndPoint e)
         {
             //要リファクタリング
 
@@ -104,8 +111,14 @@ namespace MSFS_Con
 
         private void button2_Click(object sender, EventArgs e)
         {
-            _udp.StartClientMode(textBox1.Text, 9000);
-            _udp.SendData("Request Start");
+            //_udp.StartClientMode(textBox1.Text, 9000);
+            //_udp.CreateSocket(9000, textBox1.Text);
+            //_udp.SendData("Request Start");
+            if (this._udpProvider is null)
+            {
+                this._udpProvider = new UDPProvider();
+                this._udpProvider.SetServer(textBox1.Text, 9000);
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -116,6 +129,28 @@ namespace MSFS_Con
         private void button3_Click(object sender, EventArgs e)
         {
             Controller.Instance.push();
+        }
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            //this._udpProvider?.SendData("テスト");
+            LUDPHeaderStruct sendheader = new LUDPHeaderStruct();
+            int size = Marshal.SizeOf(sendheader);
+            sendheader.Flags = 0x0A;
+            sendheader.AckNo = 45000;
+            sendheader.Tests = 0x03;
+            IntPtr pss = Marshal.AllocHGlobal(size);
+            Marshal.StructureToPtr(sendheader, pss, false);
+            byte[] sendbyte = new byte[size];
+            Marshal.Copy(pss, sendbyte, 0, size);
+            Marshal.FreeHGlobal(pss);
+
+
+            this._udpProvider?.SendData(sendbyte);
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
