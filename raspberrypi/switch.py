@@ -113,19 +113,20 @@ class RotaryEncoderaWithPushSwitchLED(Switch):
         GPIO.cleanup([self.pin_id_led_1, self.pin_id_led_2])
 
     def set_state(self, state: State):
+        if self.e_rot_sw_state != state:
+            if self.State.OFF == state:
+                self.led_a.off()
+                self.led_b.off()
+            elif self.State.ON_A == state:
+                self.led_a.on()
+                self.led_b.off()
+            elif self.State.ON_B == state:
+                self.led_a.off()
+                self.led_b.on()
+            elif self.State.ON_AB == state:
+                self.led_a.on()
+                self.led_b.on()
         self.e_rot_sw_state = state
-        if self.State.OFF == state:
-            self.led_a.off()
-            self.led_b.off()
-        elif self.State.ON_A == state:
-            self.led_a.on()
-            self.led_b.off()
-        elif self.State.ON_B == state:
-            self.led_a.off()
-            self.led_b.on()
-        elif self.State.ON_AB == state:
-            self.led_a.on()
-            self.led_b.on()
 
     def get_state(self) -> State:
         return self.e_rot_sw_state

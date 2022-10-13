@@ -1,10 +1,11 @@
 ﻿using Microsoft.FlightSimulator.SimConnect;
+using MSFS_Con;
+using MSFS_Con.Serial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static MSFS_Con.SimConnectProvider;
 
 namespace MSFS_Con
 {
@@ -40,11 +41,11 @@ namespace MSFS_Con
         {
             SimConnectProvider.Instance.ReceiveMessage();
         }
-        private void SimConnect_SendData(SimConnectProvider.EVENTS e, UInt32 flag)
+        private void SimConnect_SendData(EVENTS e, UInt32 flag)
         {
             SimConnectProvider.Instance.SendData(e, flag);
         }
-        private void SimConnect_SendData(SimConnectProvider.Val v, Double data)
+        private void SimConnect_SendData(Val v, Double data)
         {
             SimConnectProvider.Instance.SendData(v, data);
         }
@@ -60,6 +61,13 @@ namespace MSFS_Con
             this.SimConnect_OnRecvSimobjectDataEvent?.Invoke(sender, simVar, value);
             TDebug.WriteLine(simVar + ":" + value);
 
+            SerialMsgConverter.VariableData variables = SerialMsgConverter.ToVariables(simVar, value);
+            if( null != variables.simVar)
+            {
+                String command = variables.ToCommand();
+                this._serialProvider?.SendText(command);
+            }
+
             // 変数を受信してUDPで送信するならこのあたり
             // UDP.sendData(hoge);
         }
@@ -68,7 +76,7 @@ namespace MSFS_Con
         /// Receive a event
         /// </summary>
         public event Action<Object, String> SimConnect_OnRecvEventEvent;
-        private void SimConnect_OnRecvEvent(Object sender, SimConnectProvider.EVENTS recEvent)
+        private void SimConnect_OnRecvEvent(Object sender, EVENTS recEvent)
         {
             this.SimConnect_OnRecvEventEvent?.Invoke(sender, Enum.GetName(typeof(EVENTS), recEvent));
             TDebug.WriteLine("OnRecvEvent : " + Enum.GetName(typeof(EVENTS), recEvent));
@@ -125,11 +133,12 @@ namespace MSFS_Con
             //Formなどで通知を受け取るなら必要
             this.Serial_OnDataReceivedEvent?.Invoke(sender, message);
 
+            SerialMsgConverter.EventData event_data = SerialMsgConverter.ToEvents(message);
             //EVENTの送信例
-            this.SimConnect_SendData(SimConnectProvider.EVENTS.AP_MASTER, 1);
+            this.SimConnect_SendData(event_data.events, event_data.value);
 
             //Variablesの送信例
-            this.SimConnect_SendData(SimConnectProvider.VARIABLES.PLANE_ALTITUDE, 10000.0f);
+            //this.SimConnect_SendData(VARIABLES.PLANE_ALTITUDE, 10000.0f);
         }
         
 
