@@ -3,6 +3,7 @@ using MSFS_Con;
 using MSFS_Con.Serial;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,7 +70,7 @@ namespace MSFS_Con
             }
 
             // 変数を受信してUDPで送信するならこのあたり
-            // UDP.sendData(hoge);
+            this._udpProvider?.SetStreamData(simVar + ":" + value);
         }
 
         /// <summary>
@@ -80,6 +81,8 @@ namespace MSFS_Con
         {
             this.SimConnect_OnRecvEventEvent?.Invoke(sender, Enum.GetName(typeof(EVENTS), recEvent));
             TDebug.WriteLine("OnRecvEvent : " + Enum.GetName(typeof(EVENTS), recEvent));
+
+            this._udpProvider?.SetEventData(Enum.GetName(typeof(EVENTS), recEvent));
         }
 
         /// <summary>
@@ -140,12 +143,82 @@ namespace MSFS_Con
             //Variablesの送信例
             //this.SimConnect_SendData(VARIABLES.PLANE_ALTITUDE, 10000.0f);
         }
-        
+
 
         #endregion
 
         #region UDP
+        private UDPProvider _udpProvider = null;
 
+        public void UDP_StartServer()
+        {
+            if (this._udpProvider is null) this._udpProvider = new UDPProvider(9000);
+            this._udpProvider.UDPProvider_OnRetreveEventDataEvent += this.UDP_OnRetreveEventData;
+        }
+
+        public void UDP_StartClient(String serverIP, Int32 port)
+        {
+            if (this._udpProvider is null) this._udpProvider = new UDPProvider();
+            this._udpProvider?.SetServer(serverIP, port);
+
+            this._udpProvider.UDPProvider_OnRetreveStreamDataEvent += this.UDP_OnRetreveStreamData;
+            this._udpProvider.UDPProvider_OnRetreveEventDataEvent += this.UDP_OnRetreveEventData;
+            
+        }
+
+        /// <summary>
+        /// Receive peer's variables in order to set variables for MSFS2020.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="message"></param>
+        public void UDP_OnRetreveStreamData(Object sender, String message)
+        {
+            //Debug.WriteLine("Receive : " + message);
+
+            //要リファクタリング
+            String[] ar = message.Split(',');
+
+            if (ar[0] == "PLANE ALTITUDE"
+                || ar[0] == "PLANE HEADING DEGREES TRUE"
+                || ar[0] == "PLANE LATITUDE"
+                || ar[0] == "PLANE LONGITUDE"
+                || ar[0] == "PLANE BANK DEGREES"
+                || ar[0] == "PLANE PITCH DEGREES"
+                || ar[0] == "GEAR HANDLE POSITION"
+                || ar[0] == "AILERON POSITION"
+                || ar[0] == "ELEVATOR POSITION"
+                || ar[0] == "FLAP POSITION SET"
+                || ar[0] == "RUDDER POSITION"
+                || ar[0] == "GENERAL ENG THROTTLE LEVER POSITION:1"
+                || ar[0] == "GENERAL ENG THROTTLE LEVER POSITION:2"
+
+                )
+            {
+                SimConnectProvider.Instance.SendData(ar[0], Double.Parse(ar[1]));
+            }
+        }
+
+
+        //public event Action<Object, String> UDP_OnRetreveEventDataEvent;
+        /// <summary>
+        /// Receive peer's event in order to set event for MSFS2020.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="message"></param>
+        public void UDP_OnRetreveEventData(Object sender, String message)
+        {
+            EVENTS e;
+            Enum.TryParse(message, out e);
+
+            switch(e)
+            {
+                case EVENTS.FLAPS_INCR:
+                    break;
+
+                default:
+                    break;
+            }
+        }
         #endregion
 
     }

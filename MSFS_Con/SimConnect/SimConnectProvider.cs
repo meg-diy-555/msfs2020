@@ -140,13 +140,14 @@ namespace MSFS_Con
         private void SimConnect_OnRecvEvent(SimConnect sender, SIMCONNECT_RECV_EVENT recEvent)
         {
             this.OnRecvEventEvent?.Invoke(this, (EVENTS)recEvent.uEventID);
-            
+            /*
             switch (recEvent.uEventID)
             {
                 case (uint)EVENTS.FLAPS_INCR:
                     //FLAPS_INCの時の処理を書くならこんな感じ
                     break;
             }
+            */
         }
         #endregion
 

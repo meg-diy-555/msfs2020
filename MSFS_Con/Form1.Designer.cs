@@ -166,7 +166,6 @@
             this.textBox1.Size = new System.Drawing.Size(226, 25);
             this.textBox1.TabIndex = 0;
             this.textBox1.Text = "106.73.25.160";
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // timer1
             // 
@@ -182,17 +181,15 @@
             this.button3.TabIndex = 16;
             this.button3.Text = "Change alt to 10000 feet";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(420, 369);
+            this.button4.Location = new System.Drawing.Point(418, 289);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 89);
             this.button4.TabIndex = 17;
             this.button4.Text = "button4";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click_1);
             // 
             // Form1
             // 
