@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -13,9 +14,6 @@ namespace MSFS_Con
 
     public partial class Form1 : Form
     {
-        UDP _udp = null;
-        private UDPProvider _udpProvider { get; set; }
-
         public Form1()
         {
             InitializeComponent();
@@ -30,9 +28,6 @@ namespace MSFS_Con
         private void Form1_Load(object sender, EventArgs e)
         {
             this.textBox_comname.Text = Controller.Instance.Serial_ComPortName;
-
-            this._udp = new UDP();
-            this._udp.ReceiveUdpDataEvent += this.ReceiveUdpData;
         }
 
         private void textBox_comname_TextChanged(object sender, EventArgs e)
@@ -57,7 +52,7 @@ namespace MSFS_Con
 
 
         /// <summary>
-        /// Window messageを受け取り、自分宛てのメッセージが到着している時に必要なメソッドを実行するためにWndProcをオーバーライド
+        /// Override WndProc to receive Window message and execute the necessary methods when a message arrives.
         /// </summary>
         /// <param name="m"></param>
         protected override void WndProc(ref Message m)
@@ -75,52 +70,23 @@ namespace MSFS_Con
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            //_udp.StartServerMode(9000);
-            //_udp.CreateSocket(9000);
-            //TDebug.WriteLine("Server Start");
-            if (this._udpProvider is null) this._udpProvider = new UDPProvider(9000);
+            Controller.Instance.UDP_StartServer();
         }
 
-        private void ReceiveUdpData(object sender, byte[] data, IPEndPoint e)
+        private void ReceiveEventData(object sender, String message)
         {
-            //要リファクタリング
-
-            //_udp.SendData("お返事");
-            String message = Encoding.UTF8.GetString(data);
-
-            String[] ar = message.Split(',');
-
-            if (ar[0] == "PLANE ALTITUDE" 
-                || ar[0] == "PLANE HEADING DEGREES TRUE" 
-                || ar[0] == "PLANE LATITUDE" 
-                || ar[0] == "PLANE LONGITUDE" 
-                || ar[0] == "PLANE BANK DEGREES" 
-                || ar[0] == "PLANE PITCH DEGREES"
-                || ar[0] == "GEAR HANDLE POSITION"
-                || ar[0] == "AILERON POSITION"
-                || ar[0] == "ELEVATOR POSITION"
-                || ar[0] == "FLAP POSITION SET"
-                || ar[0] == "RUDDER POSITION"
-                || ar[0] == "GENERAL ENG THROTTLE LEVER POSITION:1"
-                || ar[0] == "GENERAL ENG THROTTLE LEVER POSITION:2"
-
-                )
+            /*
+            // Sample for invoke UI thread.
+            Invoke((Action)(() =>
             {
-                SimConnectProvider.Instance.SendData(ar[0], Double.Parse(ar[1]));
-                TDebug.WriteLine("受信:" + ar[0] + ":" + ar[1]);
-            }
+                TDebug.WriteLine("Received data : " + message);
+            }));
+            */
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //_udp.StartClientMode(textBox1.Text, 9000);
-            //_udp.CreateSocket(9000, textBox1.Text);
-            //_udp.SendData("Request Start");
-            if (this._udpProvider is null)
-            {
-                this._udpProvider = new UDPProvider();
-                this._udpProvider.SetServer(textBox1.Text, 9000);
-            }
+            Controller.Instance.UDP_StartClient(textBox1.Text, 9000);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -128,64 +94,7 @@ namespace MSFS_Con
             RTB_DebugWindow.Text = "";
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            Controller.Instance.push();
-        }
-        private void button4_Click_1(object sender, EventArgs e)
-        {
-            //this._udpProvider?.SendData("テスト");
-            /*
-            LUDPHeaderStruct sendheader = new LUDPHeaderStruct();
-            int size = Marshal.SizeOf(sendheader);
-            sendheader.Flags = 0x0A;
-            sendheader.AckNo = 45000;
-            sendheader.Window = 0x03;
-            IntPtr pss = Marshal.AllocHGlobal(size);
-            Marshal.StructureToPtr(sendheader, pss, false);
-            byte[] sendbyte = new byte[size];
-            Marshal.Copy(pss, sendbyte, 0, size);
-            Marshal.FreeHGlobal(pss);
-
-            this._udpProvider?.SendData(sendbyte);
-            */
-
-            LUDPPacket hd = new LUDPPacket();
-            LUDPDatagram[] dt = new LUDPDatagram[1];
-            dt[0] = new LUDPDatagram();
-            dt[0].SessionID = 1;
-            dt[0].DataSize = 10;
-            dt[0].Data = new byte[10];
-            dt[0].Data[5] = 0xFF;
-            dt[0].AckNo = 20;
-            dt[0].ChannelID = 3;
-            dt[0].SequenceNo = 15;
-
-            hd.Data = dt;
-            hd.Flags = 0x0A;
-            hd.AckNo = 20000;
-            hd.DataCount = 1;
-
-            byte[] hdbuf = this._udpProvider?.LUDPPacketToByte(hd);
-
-            this._udpProvider?.SendData(hdbuf);
 
 
-
-        }
-        private byte[] ObjectToByteArray(Object obj)
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            using (var ms = new MemoryStream())
-            {
-                bf.Serialize(ms, obj);
-                return ms.ToArray();
-            }
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }

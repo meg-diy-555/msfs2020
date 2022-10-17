@@ -68,9 +68,6 @@ namespace MSFS_Con
                 IPEndPoint e = null;
                 byte[] data = u.EndReceive(ar, ref e);
 
-                //If it is not know peer, add remoteEP.
-                //if (this._remoteEP is null) this._remoteEP = e;
-
                 this.ReceiveUdpDataEvent?.Invoke(this, data, e);
             }
             ///
