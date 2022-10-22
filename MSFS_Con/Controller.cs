@@ -60,7 +60,7 @@ namespace MSFS_Con
         private void SimConnect_OnRecvSimobjectData(Object sender, String simVar, String value)
         {
             this.SimConnect_OnRecvSimobjectDataEvent?.Invoke(sender, simVar, value);
-            TDebug.WriteLine(simVar + ":" + value);
+            TDebug.WriteLine(simVar + "@" + value);
 
             SerialMsgConverter.VariableData variables = SerialMsgConverter.ToVariables(simVar, value);
             if( null != variables.simVar)
@@ -72,7 +72,7 @@ namespace MSFS_Con
             // 変数を受信してUDPで送信するならこのあたり
             if (this._udpProvider?.IsServer == true)
             {
-                this._udpProvider?.SetStreamData(simVar + ":" + value);
+                this._udpProvider?.SetStreamData(simVar + "@" + value);
             }
         }
 
@@ -85,7 +85,7 @@ namespace MSFS_Con
             //this.SimConnect_OnRecvEventEvent?.Invoke(sender, Enum.GetName(typeof(EVENTS), recEvent));
             TDebug.WriteLine("OnRecvEvent : " + Enum.GetName(typeof(EVENTS), recEvent) + " Value:" + data.ToString());
 
-            this._udpProvider?.SetEventData(Enum.GetName(typeof(EVENTS), recEvent) + ":" + data.ToString());
+            this._udpProvider?.SetEventData(Enum.GetName(typeof(EVENTS), recEvent) + "@" + data.ToString());
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace MSFS_Con
             //Debug.WriteLine("Receive : " + message);
 
             //要リファクタリング
-            String[] ar = message.Split(':');
+            String[] ar = message.Split('@');
 
             if (ar[0] == "GEAR HANDLE POSITION"
                 || ar[0] == "PLANE ALTITUDE"
@@ -235,7 +235,7 @@ namespace MSFS_Con
             EVENTS e;
             Enum.TryParse(message, out e);
 
-            String[] ar = message.Split(':');
+            String[] ar = message.Split('@');
             this.SimConnect_SendData((EVENTS)Enum.Parse(typeof(EVENTS),ar[0]), uint.Parse(ar[1]));
 
             switch (e)
