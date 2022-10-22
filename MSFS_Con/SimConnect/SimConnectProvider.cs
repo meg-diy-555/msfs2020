@@ -85,7 +85,7 @@ namespace MSFS_Con
         /// <param name="data"></param>
         private void SimConnect_OnRecvSimobjectData(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA data)
         {
-            Debug.WriteLine("SimConnect_OnRecvSimobjectData");
+            //Debug.WriteLine("SimConnect_OnRecvSimobjectData");
 
             List<SimVarStructure> fin = m_vars.Where(e => e.Request == data.dwRequestID).ToList();
             String value = "";
@@ -182,6 +182,7 @@ namespace MSFS_Con
                 // Map Variables all
                 foreach (var v in m_vars)
                 {
+                    Debug.WriteLine("ADD DEF : " + v.Definition.ToString() + " Simvar - " + v.SimVar.ToString());
                     m_oSimConnect.AddToDataDefinition((DEFINITION)v.Definition, v.SimVar, v.Units, v.SIMCONNECT_DATATYPE, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                     if (v.Units == null)
                     {

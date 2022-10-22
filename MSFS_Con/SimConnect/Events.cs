@@ -9,12 +9,16 @@ namespace MSFS_Con
     public enum EVENTS
     {
         // If you want, add the values,
+        AILERON_SET,
+        ELEVATOR_SET,
+        FLAPS_INCR,
+        FLAPS_DECR,
+        RUDDER_SET,
+        SPOILERS_SET,
         ALTITUDE_SLOT_INDEX_SET,
         HEADING_SLOT_INDEX_SET,
         SPEED_SLOT_INDEX_SET,
         VS_SLOT_INDEX_SET,
-        FLAPS_INCR,
-        FLAPS_DECR,
         AP_MASTER,
         AP_SPD_VAR_SET,
         AP_ALT_VAR_SET_ENGLISH,
@@ -28,6 +32,6 @@ namespace MSFS_Con
         FLIGHT_LEVEL_CHANGE,
         AP_SPD_VAR_INC,
         AP_SPD_VAR_DEC,
-        EVENTS_UNKNOWN
+        EVENTS_UNKNOWN,
     };
 }
