@@ -70,7 +70,10 @@ namespace MSFS_Con
             }
 
             // 変数を受信してUDPで送信するならこのあたり
-            this._udpProvider?.SetStreamData(simVar + ":" + value);
+            if (this._udpProvider?.IsServer == true)
+            {
+                this._udpProvider?.SetStreamData(simVar + ":" + value);
+            }
         }
 
         /// <summary>
@@ -176,7 +179,7 @@ namespace MSFS_Con
             //Debug.WriteLine("Receive : " + message);
 
             //要リファクタリング
-            String[] ar = message.Split(',');
+            String[] ar = message.Split(':');
 
             if (ar[0] == "GEAR HANDLE POSITION"
                 || ar[0] == "PLANE ALTITUDE"
