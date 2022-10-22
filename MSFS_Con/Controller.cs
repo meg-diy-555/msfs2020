@@ -90,7 +90,7 @@ namespace MSFS_Con
         /// </summary>
         public void push()
         {
-            this.SimConnect_SendData(VARIABLES.PLANE_ALTITUDE, 10000.0f);
+            //this.SimConnect_SendData(VARIABLES.PLANE_ALTITUDE, 10000.0f);
         }
         
         #endregion
@@ -178,20 +178,42 @@ namespace MSFS_Con
             //要リファクタリング
             String[] ar = message.Split(',');
 
-            if (ar[0] == "PLANE ALTITUDE"
+            if (ar[0] == "GEAR HANDLE POSITION"
+                || ar[0] == "PLANE ALTITUDE"
                 || ar[0] == "PLANE HEADING DEGREES TRUE"
                 || ar[0] == "PLANE LATITUDE"
                 || ar[0] == "PLANE LONGITUDE"
                 || ar[0] == "PLANE BANK DEGREES"
                 || ar[0] == "PLANE PITCH DEGREES"
-                || ar[0] == "GEAR HANDLE POSITION"
+                || ar[0] == "ROTATION ACCELERATION BODY X"
+                || ar[0] == "ROTATION ACCELERATION BODY Y"
+                || ar[0] == "ROTATION ACCELERATION BODY Z"
+                || ar[0] == "VELOCITY BODY X"
+                || ar[0] == "VELOCITY BODY Y"
+                || ar[0] == "VELOCITY BODY Z"
+                || ar[0] == "AUTOPILOT ALTITUDE SLOT INDEX"
+                || ar[0] == "AUTOPILOT HEADING SLOT INDEX"
+                || ar[0] == "AUTOPILOT SPEED SLOT INDEX"
+                || ar[0] == "AUTOPILOT VS SLOT INDEX"
+                || ar[0] == "AUTOPILOT ALTITUDE LOCK VAR"
+                || ar[0] == "AUTOPILOT BANK HOLD REF"
+                || ar[0] == "AUTOPILOT FLIGHT LEVEL CHANGE"
+                || ar[0] == "AUTOPILOT HEADING LOCK DIR"
+                || ar[0] == "AUTOPILOT HEADING MANUALLY TUNABLE"
+                || ar[0] == "AUTOPILOT THROTTLE MAX THRUST"
+                || ar[0] == "AUTOPILOT VERTICAL HOLD VAR"
                 || ar[0] == "AILERON POSITION"
+                || ar[0] == "AILERON TRIM PCT"
                 || ar[0] == "ELEVATOR POSITION"
+                || ar[0] == "ELEVATOR TRIM POSITION"
                 || ar[0] == "FLAP POSITION SET"
+                || ar[0] == "FLAPS HANDLE INDEX"
                 || ar[0] == "RUDDER POSITION"
+                || ar[0] == "RUDDER TRIM PCT"
+                || ar[0] == "SPOILERS HANDLE POSITION"
+                || ar[0] == "FUEL TANK CENTER QUANTITY"
                 || ar[0] == "GENERAL ENG THROTTLE LEVER POSITION:1"
                 || ar[0] == "GENERAL ENG THROTTLE LEVER POSITION:2"
-
                 )
             {
                 SimConnectProvider.Instance.SendData(ar[0], Double.Parse(ar[1]));
@@ -209,6 +231,8 @@ namespace MSFS_Con
         {
             EVENTS e;
             Enum.TryParse(message, out e);
+
+            
 
             switch(e)
             {
