@@ -22,7 +22,7 @@ namespace MSFS_Con
         {
             _udp = new UDP();
             _udp.CreateSocket(0);
-            this.IsServer = true;
+            this.IsServer = false;
 
             this.UDPProviderInit();
         }
@@ -31,7 +31,7 @@ namespace MSFS_Con
         {
             _udp = new UDP();
             _udp.CreateSocket(port);
-            this.IsServer = false;
+            this.IsServer = true;
 
             this.UDPProviderInit();
         }

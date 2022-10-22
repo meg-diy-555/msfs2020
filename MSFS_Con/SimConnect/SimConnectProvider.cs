@@ -131,7 +131,7 @@ namespace MSFS_Con
             this.OnRecvSimobjectDataByTypeEvent?.Invoke(this, mes);
         }
 
-        public event Action<Object, EVENTS> OnRecvEventEvent;
+        public event Action<Object, EVENTS, uint> OnRecvEventEvent;
         /// <summary>
         /// When received events.
         /// </summary>
@@ -139,7 +139,7 @@ namespace MSFS_Con
         /// <param name="recEvent"></param>
         private void SimConnect_OnRecvEvent(SimConnect sender, SIMCONNECT_RECV_EVENT recEvent)
         {
-            this.OnRecvEventEvent?.Invoke(this, (EVENTS)recEvent.uEventID);
+            this.OnRecvEventEvent?.Invoke(this, (EVENTS)recEvent.uEventID, recEvent.dwData);
             /*
             switch (recEvent.uEventID)
             {
