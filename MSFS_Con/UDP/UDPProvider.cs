@@ -15,12 +15,14 @@ namespace MSFS_Con
     {
         protected UDP _udp { get; set; }
         private List<ConnectionManager> _ludpPeerStruct = new List<ConnectionManager>();
+        public Boolean IsServer { get; set; }
 
         // Client mode
         public UDPProvider()
         {
             _udp = new UDP();
             _udp.CreateSocket(0);
+            this.IsServer = true;
 
             this.UDPProviderInit();
         }
@@ -29,6 +31,7 @@ namespace MSFS_Con
         {
             _udp = new UDP();
             _udp.CreateSocket(port);
+            this.IsServer = false;
 
             this.UDPProviderInit();
         }
