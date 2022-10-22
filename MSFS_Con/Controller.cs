@@ -79,13 +79,13 @@ namespace MSFS_Con
         /// <summary>
         /// Receive a event
         /// </summary>
-        public event Action<Object, String> SimConnect_OnRecvEventEvent;
-        private void SimConnect_OnRecvEvent(Object sender, EVENTS recEvent)
+        //public event Action<Object, String> SimConnect_OnRecvEventEvent;
+        private void SimConnect_OnRecvEvent(Object sender, EVENTS recEvent, UInt32 data)
         {
-            this.SimConnect_OnRecvEventEvent?.Invoke(sender, Enum.GetName(typeof(EVENTS), recEvent));
-            TDebug.WriteLine("OnRecvEvent : " + Enum.GetName(typeof(EVENTS), recEvent));
+            //this.SimConnect_OnRecvEventEvent?.Invoke(sender, Enum.GetName(typeof(EVENTS), recEvent));
+            TDebug.WriteLine("OnRecvEvent : " + Enum.GetName(typeof(EVENTS), recEvent) + " Value:" + data.ToString());
 
-            this._udpProvider?.SetEventData(Enum.GetName(typeof(EVENTS), recEvent));
+            this._udpProvider?.SetEventData(Enum.GetName(typeof(EVENTS), recEvent) + ":" + data.ToString());
         }
 
         /// <summary>
@@ -235,9 +235,10 @@ namespace MSFS_Con
             EVENTS e;
             Enum.TryParse(message, out e);
 
-            
+            String[] ar = message.Split(':');
+            this.SimConnect_SendData((EVENTS)Enum.Parse(typeof(EVENTS),ar[0]), uint.Parse(ar[1]));
 
-            switch(e)
+            switch (e)
             {
                 case EVENTS.FLAPS_INCR:
                     break;

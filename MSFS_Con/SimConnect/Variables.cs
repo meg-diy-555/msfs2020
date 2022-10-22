@@ -22,9 +22,12 @@ namespace MSFS_Con
 
     public class VARIABLES
     {
-        
+        //AIRCRAFT BRAKE / LANDING GEAR VARIABLES
+        public static Val GEAR_HANDLE_POSITION { get; } = new Val() { Name = "GEAR HANDLE POSITION", Units = "Percent", SIMCONNECT_PERIOD = SIMCONNECT_PERIOD.SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG = SIMCONNECT_DATA_REQUEST_FLAG.CHANGED };
+        public static Val BRAKE_LEFT_POSITION { get; } = new Val() { Name = "BRAKE LEFT POSITION", Units = "Position", SIMCONNECT_PERIOD = SIMCONNECT_PERIOD.SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG = SIMCONNECT_DATA_REQUEST_FLAG.CHANGED };
+        public static Val BRAKE_RIGHT_POSITION { get; } = new Val() { Name = "BRAKE RIGHT POSITION", Units = "Position", SIMCONNECT_PERIOD = SIMCONNECT_PERIOD.SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG = SIMCONNECT_DATA_REQUEST_FLAG.CHANGED };
+
         //AIRCRAFT MISC VARIABLES
-        public static Val GEAR_HANDLE_POSITION { get; } = new Val() { Name = "GEAR HANDLE POSITION", Units = "Bool", SIMCONNECT_PERIOD = SIMCONNECT_PERIOD.SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG = SIMCONNECT_DATA_REQUEST_FLAG.CHANGED };
         public static Val PLANE_ALTITUDE { get; } = new Val() { Name = "PLANE ALTITUDE", Units = "Feet" };
         public static Val PLANE_HEADING_DEGREES_TRUE { get; } = new Val() { Name = "PLANE HEADING DEGREES TRUE", Units = "Degrees" };
         public static Val PLANE_LATITUDE { get; } = new Val() { Name = "PLANE LATITUDE", Units = "Radians" };
@@ -53,15 +56,15 @@ namespace MSFS_Con
         public static Val AUTOPILOT_VERTICAL_HOLD_VAR { get; } = new Val() { Name = "AUTOPILOT VERTICAL HOLD VAR", Units = "Feet" };
         
         // AIRCRAFT CONTROL VARIABLES
-        public static Val AILERON_POSITION { get; } = new Val() { Name = "AILERON POSITION", Units = "Position", SIMCONNECT_PERIOD = SIMCONNECT_PERIOD.SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG = SIMCONNECT_DATA_REQUEST_FLAG.CHANGED };
-        public static Val AILERON_TRIM_PCT { get; } = new Val() { Name = "AILERON TRIM PCT", Units = "Percent", SIMCONNECT_PERIOD = SIMCONNECT_PERIOD.SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG = SIMCONNECT_DATA_REQUEST_FLAG.CHANGED };
-        public static Val ELEVATOR_POSITION { get; } = new Val() { Name = "ELEVATOR POSITION", Units = "Position", SIMCONNECT_PERIOD = SIMCONNECT_PERIOD.SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG = SIMCONNECT_DATA_REQUEST_FLAG.CHANGED };
-        public static Val ELEVATOR_TRIM_POSITION { get; } = new Val() { Name = "ELEVATOR TRIM POSITION", Units = "Radians", SIMCONNECT_PERIOD = SIMCONNECT_PERIOD.SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG = SIMCONNECT_DATA_REQUEST_FLAG.CHANGED };
+        public static Val AILERON_POSITION { get; } = new Val() { Name = "AILERON POSITION", Units = "Position" };
+        public static Val AILERON_TRIM_PCT { get; } = new Val() { Name = "AILERON TRIM PCT", Units = "Percent" };
+        public static Val ELEVATOR_POSITION { get; } = new Val() { Name = "ELEVATOR POSITION", Units = "Position" };
+        public static Val ELEVATOR_TRIM_POSITION { get; } = new Val() { Name = "ELEVATOR TRIM POSITION", Units = "Radians" };
         public static Val FLAP_POSITION_SET { get; } = new Val() { Name = "FLAP POSITION SET", Units = "Position", SIMCONNECT_PERIOD = SIMCONNECT_PERIOD.SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG = SIMCONNECT_DATA_REQUEST_FLAG.CHANGED };
         public static Val FLAPS_HANDLE_INDEX { get; } = new Val() { Name = "FLAPS HANDLE INDEX", Units = "Number", SIMCONNECT_PERIOD = SIMCONNECT_PERIOD.SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG = SIMCONNECT_DATA_REQUEST_FLAG.CHANGED };
-        public static Val RUDDER_POSITION { get; } = new Val() { Name = "RUDDER POSITION", Units = "Position", SIMCONNECT_PERIOD = SIMCONNECT_PERIOD.SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG = SIMCONNECT_DATA_REQUEST_FLAG.CHANGED };
-        public static Val RUDDER_TRIM_PCT { get; } = new Val() { Name = "RUDDER TRIM PCT", Units = "Percent", SIMCONNECT_PERIOD = SIMCONNECT_PERIOD.SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG = SIMCONNECT_DATA_REQUEST_FLAG.CHANGED };
-        public static Val SPOILERS_HANDLE_POSITION { get; } = new Val() { Name = "SPOILERS HANDLE POSITION", Units = "Position", SIMCONNECT_PERIOD = SIMCONNECT_PERIOD.SIM_FRAME, SIMCONNECT_DATA_REQUEST_FLAG = SIMCONNECT_DATA_REQUEST_FLAG.CHANGED };
+        public static Val RUDDER_POSITION { get; } = new Val() { Name = "RUDDER POSITION", Units = "Position" };
+        public static Val RUDDER_TRIM_PCT { get; } = new Val() { Name = "RUDDER TRIM PCT", Units = "Percent" };
+        public static Val SPOILERS_HANDLE_POSITION { get; } = new Val() { Name = "SPOILERS HANDLE POSITION", Units = "Position" };
 
         // AIRCRAFT FUEL VARIABLES
         //public static Val FUEL_TANK_CENTER_QUANTITY { get; } = new Val() { Name = "FUEL TANK CENTER QUANTITY", Units = "Gallons" };
