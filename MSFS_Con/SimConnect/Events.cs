@@ -10,6 +10,7 @@ namespace MSFS_Con
     {
         // If you want, add the values,
         AILERON_SET,
+        AXIS_AILERONS_SET,
         ELEVATOR_SET,
         FLAPS_INCR,
         FLAPS_DECR,
