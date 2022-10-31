@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
-using static MSFS_Con.UDPProvider;
 
 namespace MSFS_Con
 {
 
     public partial class Form1 : Form
     {
+        Dictionary<String, List<String>> _paramPairs = new Dictionary<String, List<String>>();
+        DateTime _newestTime = DateTime.Now;
+
         public Form1()
         {
             InitializeComponent();
@@ -28,6 +26,9 @@ namespace MSFS_Con
         private void Form1_Load(object sender, EventArgs e)
         {
             this.textBox_comname.Text = Controller.Instance.Serial_ComPortName;
+
+            Controller.Instance.SimConnect_OnRecvEventEvent += this.ReceiveEventData;
+            Controller.Instance.SimConnect_OnRecvSimobjectDataEvent += this.ReceiveStreamData;
         }
 
         private void textBox_comname_TextChanged(object sender, EventArgs e)
@@ -73,15 +74,24 @@ namespace MSFS_Con
             Controller.Instance.UDP_StartServer();
         }
 
-        private void ReceiveEventData(object sender, String message)
+        private void ReceiveEventData(object sender, String e, String data)
         {
+            if(this._newestTime < DateTime.Now) this._newestTime = DateTime.Now;
+            List<String> v = new List<String> { DateTime.Now.ToString("HH:mm:ss"), data };
+            this._paramPairs["EVENT: " + e] = v;
             /*
             // Sample for invoke UI thread.
             Invoke((Action)(() =>
             {
-                TDebug.WriteLine("Received data : " + message);
+                TDebug.WriteLine("Received data : " + e + " data:" + data);
             }));
             */
+        }
+        private void ReceiveStreamData(object sender, String simvar, String value)
+        {
+            if (this._newestTime < DateTime.Now) this._newestTime = DateTime.Now;
+            List<String> v = new List<String> { DateTime.Now.ToString("HH:mm:ss"), value };
+            this._paramPairs["STREM: " + simvar] = v;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -91,7 +101,22 @@ namespace MSFS_Con
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            RTB_DebugWindow.Text = "";
+            String mes = "";         
+
+            foreach(KeyValuePair<String, List<String>> pair in this._paramPairs.OrderBy( p => p.Key))
+            {
+                mes += pair.Value[0] + " - " + pair.Key + " @ " + pair.Value[1] + "\n";
+            }
+            RTB_DebugWindow.Text = mes;
+
+            int pos = 0;
+            while(true)
+            {
+                pos = RTB_DebugWindow.Find(this._newestTime.ToString("HH:mm:ss"), pos, RichTextBoxFinds.None);
+                if (pos == -1) break;
+                RTB_DebugWindow.SelectionBackColor = Color.Aquamarine;
+                pos++;
+            }
         }
 
 

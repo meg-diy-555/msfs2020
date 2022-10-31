@@ -60,7 +60,7 @@ namespace MSFS_Con
         private void SimConnect_OnRecvSimobjectData(Object sender, String simVar, String value)
         {
             this.SimConnect_OnRecvSimobjectDataEvent?.Invoke(sender, simVar, value);
-            TDebug.WriteLine(simVar + "@" + value);
+            //TDebug.WriteLine(simVar + "@" + value);
 
             SerialMsgConverter.VariableData variables = SerialMsgConverter.ToVariables(simVar, value);
             if( null != variables.simVar)
@@ -79,11 +79,11 @@ namespace MSFS_Con
         /// <summary>
         /// Receive a event
         /// </summary>
-        //public event Action<Object, String> SimConnect_OnRecvEventEvent;
+        public event Action<Object, String, String> SimConnect_OnRecvEventEvent;
         private void SimConnect_OnRecvEvent(Object sender, EVENTS recEvent, UInt32 data)
         {
-            //this.SimConnect_OnRecvEventEvent?.Invoke(sender, Enum.GetName(typeof(EVENTS), recEvent));
-            TDebug.WriteLine("OnRecvEvent : " + Enum.GetName(typeof(EVENTS), recEvent) + " Value:" + data.ToString());
+            this.SimConnect_OnRecvEventEvent?.Invoke(sender, Enum.GetName(typeof(EVENTS), recEvent), data.ToString());
+            //TDebug.WriteLine("OnRecvEvent : " + Enum.GetName(typeof(EVENTS), recEvent) + " Value:" + data.ToString());
 
             this._udpProvider?.SetEventData(Enum.GetName(typeof(EVENTS), recEvent) + "@" + data.ToString());
         }
@@ -174,7 +174,7 @@ namespace MSFS_Con
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="message"></param>
-        public void UDP_OnRetreveStreamData(Object sender, String message)
+        private void UDP_OnRetreveStreamData(Object sender, String message)
         {
             //Debug.WriteLine("Receive : " + message);
 
@@ -230,7 +230,7 @@ namespace MSFS_Con
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="message"></param>
-        public void UDP_OnRetreveEventData(Object sender, String message)
+        private void UDP_OnRetreveEventData(Object sender, String message)
         {
             EVENTS e;
             Enum.TryParse(message, out e);
