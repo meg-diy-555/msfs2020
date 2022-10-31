@@ -85,10 +85,10 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 906);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 1532);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 13, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(1180, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1049, 22);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -99,12 +99,13 @@
             // 
             // RTB_DebugWindow
             // 
-            this.RTB_DebugWindow.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.RTB_DebugWindow.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.RTB_DebugWindow.Location = new System.Drawing.Point(8, 542);
             this.RTB_DebugWindow.Margin = new System.Windows.Forms.Padding(2);
             this.RTB_DebugWindow.Name = "RTB_DebugWindow";
-            this.RTB_DebugWindow.Size = new System.Drawing.Size(1164, 380);
+            this.RTB_DebugWindow.Size = new System.Drawing.Size(1033, 1006);
             this.RTB_DebugWindow.TabIndex = 1;
             this.RTB_DebugWindow.Text = "";
             // 
@@ -170,7 +171,7 @@
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 5000;
+            this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // button3
@@ -195,7 +196,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1180, 928);
+            this.ClientSize = new System.Drawing.Size(1049, 1554);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.statusStrip1);
