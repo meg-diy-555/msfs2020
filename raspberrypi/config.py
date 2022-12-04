@@ -16,7 +16,7 @@ class Config:
 
     pin_id_rot_2_a = 16
     pin_id_rot_2_b = 20
-    pin_id_rot_2_sw = 21
+    pin_id_rot_2_push_sw = 21
     pin_id_led_2_a = 8
     pin_id_led_2_b = 7
     pin_id_rot_2_pull_sw = 12
@@ -29,7 +29,7 @@ class Config:
 
     pin_id_rot_3_a = 17
     pin_id_rot_3_b = 27
-    pin_id_rot_3_sw = 22
+    pin_id_rot_3_push_sw = 22
     pin_id_led_3_a = 10
     pin_id_led_3_b = 9
     pin_id_rot_3_pull_sw = 4
@@ -42,7 +42,7 @@ class Config:
 
     pin_id_rot_4_a = 5
     pin_id_rot_4_b = 6
-    pin_id_rot_4_sw = 13
+    pin_id_rot_4_push_sw = 13
     pin_id_led_4_a = 19
     pin_id_led_4_b = 26
     pin_id_rot_4_pull_sw = 0
@@ -52,6 +52,14 @@ class Config:
     text_rot_4_state_a = "ROT4_A\r\n"
     text_rot_4_state_b = "ROT4_B\r\n"
     text_rot_4_state_ab = "ROT4_AB\r\n"
+
+    pin_id_ap_sw = 2
+    pin_id_ap_led = 1
+    text_ap_sw = "AP_SW\r\n"
+
+    pin_id_at_sw = 3
+    pin_id_at_led = 11
+    text_at_sw = "AT_SW\r\n"
 
 
     com_name = '/dev/ttyGS0'
