@@ -18,6 +18,7 @@ namespace MSFS_Con
         ALTITUDE_SLOT_INDEX_SET,
         HEADING_SLOT_INDEX_SET,
         SPEED_SLOT_INDEX_SET,
+        AP_VS_SLOT_INDEX_SET,
         VS_SLOT_INDEX_SET,
         AP_MASTER,
         AUTO_THROTTLE_ARM,
