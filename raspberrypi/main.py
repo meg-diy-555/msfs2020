@@ -210,7 +210,7 @@ class PushSwitch_3 (PushSwitch):
 
     def event_sw_pushed(self):
         if not self.is_silent: print("ROT3_PULL_SW")
-        self.serial.send_str(Config.text_rot_1_state_off)
+        self.serial.send_str(Config.text_rot_3_state_off)
         pass
 
 class PushSwitch_4 (PushSwitch):
@@ -221,7 +221,7 @@ class PushSwitch_4 (PushSwitch):
 
     def event_sw_pushed(self):
         if not self.is_silent: print("ROT4_PULL_SW")
-        self.serial.send_str(Config.text_rot_1_state_off)
+        self.serial.send_str(Config.text_rot_4_state_off)
         pass
 
 class PushSwitch_AP (PushSwitchWithLED):
@@ -247,17 +247,41 @@ class PushSwitch_AT (PushSwitchWithLED):
         pass
 
 def serial_received(msg : str):
-    global sw1
+    global rot_sw1, rot_sw2, rot_sw3, rot_sw4
+    global pull_sw1, pull_sw2, pull_sw3, pull_sw4
+    global ap_sw, at_sw
     print(msg)
-    if(msg == "AUTOPILOT SPEED SLOT INDEX:1\r\n"):
-        sw1.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_B)
+    if(msg == "AUTOPILOT VS SLOT INDEX:1\r\n"):
+        rot_sw1.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_A)   # unmanaged
+    elif(msg == "AUTOPILOT VS SLOT INDEX:2\r\n"):
+        rot_sw1.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_B)   # managed
+    elif(msg == "AUTOPILOT ALTITUDE SLOT INDEX:1\r\n"):
+        rot_sw2.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_A)   # unmanaged
+    elif(msg == "AUTOPILOT ALTITUDE SLOT INDEX:2\r\n"):
+        rot_sw2.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_B)   # managed
+    elif(msg == "AUTOPILOT HEADING SLOT INDEX:1\r\n"):
+        rot_sw3.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_A)   # unmanaged
+    elif(msg == "AUTOPILOT HEADING SLOT INDEX:2\r\n"):
+        rot_sw3.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_B)   # managed
+    elif(msg == "AUTOPILOT SPEED SLOT INDEX:1\r\n"):
+        rot_sw4.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_A)   # unmanaged
     elif(msg == "AUTOPILOT SPEED SLOT INDEX:2\r\n"):
-        sw1.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_A)
+        rot_sw4.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_B)   # managed
+    elif(msg == "AUTOPILOT MASTER:0\r\n"):
+        ap_sw.set_state(PushSwitchWithLED.State.OFF)
+    elif(msg == "AUTOPILOT MASTER:1\r\n"):
+        ap_sw.set_state(PushSwitchWithLED.State.ON)
+    elif(msg == "AUTOPILOT THROTTLE ARM:0\r\n"):
+        at_sw.set_state(PushSwitchWithLED.State.OFF)
+    elif(msg == "AUTOPILOT THROTTLE ARM:1\r\n"):
+        at_sw.set_state(PushSwitchWithLED.State.ON)
 
 
 
 def main():
-    global sw1
+    global rot_sw1, rot_sw2, rot_sw3, rot_sw4
+    global pull_sw1, pull_sw2, pull_sw3, pull_sw4
+    global ap_sw, at_sw
     serial = MySerial(serial_received).start()
     rot_sw1 = RotaryEncoderaWithPushSwitchLED_1(serial, is_silent=False)
     pull_sw1 = PushSwitch_1(serial, is_silent=False)
@@ -272,25 +296,24 @@ def main():
     at_sw = PushSwitch_AT(serial, is_silent=False)
 
     # test
-    rot_sw1.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_A)
-    rot_sw2.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_A)
-    rot_sw3.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_A)
-    rot_sw4.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_A)
-    time.sleep(1)
-    rot_sw1.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_B)
-    rot_sw2.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_B)
-    rot_sw3.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_B)
-    rot_sw4.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_B)
-    time.sleep(1)
     rot_sw1.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_AB)
     rot_sw2.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_AB)
     rot_sw3.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_AB)
     rot_sw4.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_AB)
     ap_sw.set_state(PushSwitchWithLED.State.ON)
     at_sw.set_state(PushSwitchWithLED.State.ON)
-    time.sleep(1)
-    # ap_sw.set_state(PushSwitchWithLED.State.OFF)
-    # at_sw.set_state(PushSwitchWithLED.State.OFF)
+    time.sleep(0.5)
+    rot_sw1.set_state(RotaryEncoderaWithPushSwitchLED.State.OFF)
+    rot_sw2.set_state(RotaryEncoderaWithPushSwitchLED.State.OFF)
+    rot_sw3.set_state(RotaryEncoderaWithPushSwitchLED.State.OFF)
+    rot_sw4.set_state(RotaryEncoderaWithPushSwitchLED.State.OFF)
+    ap_sw.set_state(PushSwitchWithLED.State.OFF)
+    at_sw.set_state(PushSwitchWithLED.State.OFF)
+    time.sleep(0.5)
+    rot_sw1.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_B)
+    rot_sw2.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_B)
+    rot_sw3.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_B)
+    rot_sw4.set_state(RotaryEncoderaWithPushSwitchLED.State.ON_B)
 
 
     try:

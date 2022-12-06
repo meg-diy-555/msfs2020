@@ -54,7 +54,11 @@ namespace MSFS_Con
         public static Val AUTOPILOT_HEADING_MANUALLY_TUNABLE { get; } = new Val() { Name = "AUTOPILOT HEADING MANUALLY TUNABLE", Units = "Bool" };
         public static Val AUTOPILOT_THROTTLE_MAX_THRUST { get; } = new Val() { Name = "AUTOPILOT THROTTLE MAX THRUST", Units = "Percent" };
         public static Val AUTOPILOT_VERTICAL_HOLD_VAR { get; } = new Val() { Name = "AUTOPILOT VERTICAL HOLD VAR", Units = "Feet" };
+        public static Val AUTOPILOT_MASTER { get; } = new Val() { Name = "AUTOPILOT MASTER", Units = "Bool" };
+        public static Val AUTOPILOT_THROTTLE_ARM { get; } = new Val() { Name = "AUTOPILOT THROTTLE ARM", Units = "Bool" };
         
+
+
         // AIRCRAFT CONTROL VARIABLES
         public static Val AILERON_POSITION { get; } = new Val() { Name = "AILERON POSITION", Units = "Position" };
         public static Val AILERON_TRIM_PCT { get; } = new Val() { Name = "AILERON TRIM PCT", Units = "Percent" };
